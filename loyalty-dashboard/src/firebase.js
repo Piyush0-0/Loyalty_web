@@ -1,6 +1,9 @@
+// src/firebase.js
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
+// 🔐 Your Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyB36PDlauAZwXXGMTWZZiw90Af9wo-tFeQ",
   authDomain: "loyalty-h6.firebaseapp.com",
@@ -12,8 +15,11 @@ const firebaseConfig = {
   measurementId: "G-R8REE4C8YV"
 };
 
+// 🔧 Initialize Firebase services
 const app = initializeApp(firebaseConfig);
-
 const db = getFirestore(app);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
-export { db };
+// 🚀 Export to use in components
+export { db, auth, provider };
