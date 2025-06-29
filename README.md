@@ -5,3 +5,7 @@ Owner: Piyush Samanta
 
 
 this repository simulated a dashboard where user can earn loyalty points and spend them for goods
+
+technologies used:
+1.ReactJS
+2.MongoDB Atlas
