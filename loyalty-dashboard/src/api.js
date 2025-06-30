@@ -1,16 +1,31 @@
-import axios from "axios";
+export async function getUser(email) {
+  const res = await fetch(`http://localhost:5000/api/users/${email}`);
+  if (!res.ok) {
+    throw new Error("Failed to fetch user");
+  }
+  return res.json();
+}
 
-const API_BASE = "http://localhost:5000/api/users";
+export async function claimReward(email, reward) {
+  const res = await fetch("http://localhost:5000/api/users/claim", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, reward }),
+  });
+  if (!res.ok) {
+    throw new Error("Failed to claim reward");
+  }
+  return res.json();
+}
 
-// Get user by email (fixed: URL-encoding email)
-export const getUser = async (email) => {
-  const encodedEmail = encodeURIComponent(email);
-  const res = await axios.get(`${API_BASE}/${encodedEmail}`);
-  return res.data;
-};
-
-// Claim a reward
-export const claimReward = async (email, reward) => {
-  const res = await axios.post(`${API_BASE}/claim`, { email, reward });
-  return res.data;
-};
+export async function spendPoints(email, item) {
+  const res = await fetch("http://localhost:5000/api/users/spend", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, item }),
+  });
+  if (!res.ok) {
+    throw new Error("Failed to spend points");
+  }
+  return res.json();
+}

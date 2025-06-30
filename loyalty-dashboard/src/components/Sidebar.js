@@ -1,12 +1,12 @@
 import React from "react";
 
-function Sidebar({ searchTerm, setSearchTerm, filteredSections, activeSection, setActiveSection }) {
+function Sidebar({ searchTerm, setSearchTerm, activeSection, setActiveSection, filteredSections }) {
   return (
     <div className="sidebar">
       <input
+        className="search-input"
         type="text"
         placeholder="Search..."
-        className="search-input"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />

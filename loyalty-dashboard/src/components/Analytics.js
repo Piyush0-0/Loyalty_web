@@ -1,8 +1,15 @@
 import React from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
-function Analytics({ recentActivity }) {
-  // Prepare data for the chart
+function Analytics({ recentActivity, points }) {
   const data = [
     {
       name: "Earned",
@@ -10,14 +17,20 @@ function Analytics({ recentActivity }) {
     },
     {
       name: "Redeemed",
-      points: recentActivity.rewards.reduce((sum, item) => sum + Math.abs(item.points), 0),
+      points: recentActivity.rewards.reduce((sum, item) => sum + item.points, 0),
+    },
+    {
+      name: "Spent",
+      points: recentActivity.spent.reduce((sum, item) => sum + Math.abs(item.points), 0),
     },
   ];
 
   return (
-    <div style={{ width: "100%", height: 300 }}>
-      <h2>Analytics</h2>
-      <ResponsiveContainer>
+    <div className="analytics">
+      <h2>Points Analytics</h2>
+      <p>Current Points: {points}</p>
+
+      <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>
           <XAxis dataKey="name" />
           <YAxis />

@@ -49,7 +49,6 @@ body {
   padding: 12px 10px;
   background-color: white;
   color: black;
-  /* border-radius: 10px; */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   font-weight: 500;
@@ -57,12 +56,10 @@ body {
   transition: all 0.2s ease;
   white-space: nowrap;
 }
-
 .menu-item:hover {
   transform: scale(1.03);
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
-
 .menu-item.active {
   background-color: #333;
   color: white;
@@ -111,20 +108,25 @@ body {
 }
 
 .card {
-  background-color: white;
+  background-color: thistle;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.1);
   font-weight: bold;
   text-align: center;
   line-height: 1.5;
+  transition: all 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Recent Activity */
 .recent-activity {
   display: flex;
   gap: 30px;
 }
-
 .activity-column {
   flex: 1;
   background-color: #f9f9f9;
@@ -132,74 +134,111 @@ body {
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
-
 .activity-item {
   margin-top: 15px;
   padding: 10px 0;
   border-bottom: 1px solid #ddd;
+  transition: background-color 0.2s ease;
 }
-
+.activity-item:hover {
+  background-color: #f0f0f0;
+  border-radius: 8px;
+}
 .date {
   font-size: 13px;
   color: #999;
 }
-
 .desc {
   font-weight: 500;
   margin: 5px 0;
 }
-
 .by {
   font-size: 12px;
   color: #777;
 }
-
 .points {
   font-size: 14px;
   font-weight: bold;
   color: green;
 }
-
 .points.negative {
   color: red;
 }
 
 /* Rewards Section */
 .rewards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  justify-content: center;
+  padding: 30px;
 }
 
-.reward-card {
-  background-color: white;
-  border-radius: 12px;
+.tilt-card {
+  border-radius: 16px;
   padding: 20px;
   text-align: center;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease;
-}
-
-.reward-card:hover {
-  transform: scale(1.03);
+  transition: all 0.6s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  width: 220px;
+  position: relative;
 }
 
 .claim-btn {
-  margin-top: 10px;
-  padding: 10px 15px;
-  background-color: black;
+  background: black;
   color: white;
+  padding: 10px 20px;
   border: none;
+  font-weight: bold;
+  font-size: 14px;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.3s ease;
 }
-
 .claim-btn:hover {
   background-color: #444;
+  transform: scale(1.05);
+}
+.claim-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3) inset;
 }
 
-/* Analytics, History, Form Section */
+.popup-overlay {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1.2);
+  background: #ffffffdd;
+  color: #4CAF50;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 12px;
+  animation: popup-fade 1.5s ease forwards, spin-card 1.5s ease;
+}
+
+@keyframes popup-fade {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+}
+
+@keyframes spin-card {
+  0% { transform: rotateY(0deg); }
+  50% { transform: rotateY(180deg); }
+  100% { transform: rotateY(360deg); }
+}
+
+.disappear {
+  animation: vanish 0.4s ease-out 1.5s forwards;
+}
+
+@keyframes vanish {
+  to { opacity: 0; transform: scale(0.8); }
+}
+
+/* Analytics / History / Forms */
 .analytics-placeholder,
 .history-table,
 .form-area {
@@ -215,12 +254,17 @@ body {
   border-collapse: collapse;
   margin-top: 20px;
 }
-
 .history-table th,
 .history-table td {
   border: 1px solid #ddd;
   padding: 10px;
   text-align: left;
+}
+.history-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+.history-table tbody tr:hover {
+  background-color: #f7f7f7;
 }
 
 /* Forms */
@@ -233,4 +277,16 @@ body {
   border: 1px solid #ccc;
   border-radius: 6px;
   box-sizing: border-box;
+}
+.form-area .claim-btn {
+  transition: all 0.3s ease;
+}
+.form-area .claim-btn:hover {
+  transform: scale(1.03);
+  background-color: #222;
+}
+
+/* Pie chart legend tweak */
+.recharts-legend-item {
+  font-size: 14px;
 }

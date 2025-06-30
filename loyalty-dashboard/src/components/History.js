@@ -30,6 +30,14 @@ function History({ recentActivity }) {
               <td style={{ color: "red" }}>{item.points}</td>
             </tr>
           ))}
+          {recentActivity.spent.map((item, i) => (
+            <tr key={`spent-${i}`}>
+              <td>{item.date}</td>
+              <td>Spent</td>
+              <td>{item.title}</td>
+              <td style={{ color: "red" }}>{item.points}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
