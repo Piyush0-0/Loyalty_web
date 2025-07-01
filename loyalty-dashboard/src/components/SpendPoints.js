@@ -11,7 +11,7 @@ function SpendPoints({ spendList, points, handleSpend }) {
 
     setTimeout(() => {
       handleSpend(id);
-    }, 2000); // Animation duration
+    }, 2000);
   };
 
   return (

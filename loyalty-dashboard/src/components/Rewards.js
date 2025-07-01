@@ -11,7 +11,7 @@ function Rewards({ rewardsList, points, handleClaim }) {
 
     setTimeout(() => {
       handleClaim(id);
-    }, 2000); // Animation duration
+    }, 2000); 
   };
 
   return (

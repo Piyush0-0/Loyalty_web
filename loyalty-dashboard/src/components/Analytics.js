@@ -74,7 +74,7 @@ function Analytics({ recentActivity, points }) {
         </div>
       </div>
 
-      {/* Row 2: Area + Line */}
+      {}
       <div style={{ display: "flex", gap: "30px", flexWrap: "wrap" }}>
         <div style={{ flex: 1 }} className="analytics-placeholder">
           <h3>Transaction Timeline (Line)</h3>

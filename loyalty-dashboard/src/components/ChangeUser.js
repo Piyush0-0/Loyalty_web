@@ -1,9 +1,19 @@
 import React from "react";
 
-function ChangeUser() {
+function ChangeUser({ setActiveSection }) {
+  const stopPropagation = (e) => e.stopPropagation();
+
   return (
-    <div className="login-overlay">
-      <div className="login-box">
+    <div className="login-overlay" onClick={() => setActiveSection("User Setup")}>
+      <div className="login-box" onClick={stopPropagation}>
+        <button
+          className="back-button glassy-btn"
+          onClick={() => setActiveSection("User Setup")}
+          style={{ marginBottom: "10px" }}
+        >
+          ← Back
+        </button>
+
         <h2>Welcome Back</h2>
         <p>Please login to continue</p>
 

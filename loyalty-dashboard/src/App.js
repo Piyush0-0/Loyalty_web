@@ -9,7 +9,6 @@ import Rewards from "./components/Rewards";
 import SpendPoints from "./components/SpendPoints";
 import Analytics from "./components/Analytics";
 import History from "./components/History";
-import UserSetup from "./components/UserSetup";
 import Settings from "./components/Settings";
 import ChangeUser from "./components/ChangeUser";
 import UpdateProfile from "./components/UpdateProfile";
@@ -192,28 +191,19 @@ function App() {
             <Home summary={summary} recentActivity={recentActivity} />
           )}
           {activeSection === "Rewards" && (
-            <Rewards
-              rewardsList={rewardsList}
-              points={points}
-              handleClaim={handleClaim}
-            />
+            <Rewards rewardsList={rewardsList} points={points} handleClaim={handleClaim} />
           )}
           {activeSection === "Spend Points" && (
-            <SpendPoints
-              spendList={spendList}
-              points={points}
-              handleSpend={handleSpend}
-            />
+            <SpendPoints spendList={spendList} points={points} handleSpend={handleSpend} />
           )}
           {activeSection === "Analytics" && (
             <Analytics recentActivity={recentActivity} points={points} />
           )}
-          {activeSection === "History" && (
-            <History recentActivity={recentActivity} />
-          )}
-          {activeSection === "User Setup" && <UserSetup />}
+          {activeSection === "History" && <History recentActivity={recentActivity} />}
           {activeSection === "Settings" && <Settings />}
-          {activeSection === "Change User" && <ChangeUser />}
+          {activeSection === "Change User" && (
+            <ChangeUser setActiveSection={setActiveSection} />
+          )}
           {activeSection === "Update Profile" && <UpdateProfile />}
           {activeSection === "Logout" && (
             <LogoutPopup setActiveSection={setActiveSection} />

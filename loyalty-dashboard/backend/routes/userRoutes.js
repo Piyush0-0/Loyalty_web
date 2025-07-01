@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
 
-// Get user by email
 router.get("/:email", async (req, res) => {
   try {
     const user = await User.findOne({ email: req.params.email });
@@ -14,7 +13,6 @@ router.get("/:email", async (req, res) => {
   }
 });
 
-// Claim reward (Earn points)
 router.post("/claim", async (req, res) => {
   const { email, reward } = req.body;
 
@@ -39,7 +37,6 @@ router.post("/claim", async (req, res) => {
   }
 });
 
-// Spend points
 router.post("/spend", async (req, res) => {
   const { email, item } = req.body;
 

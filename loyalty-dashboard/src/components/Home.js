@@ -42,7 +42,7 @@ function Home({ summary, recentActivity }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
-      {/* Current Points Badge */}
+      {}
       <Tilt tiltMaxAngleX={10} tiltMaxAngleY={10} scale={1.02}>
         <div
           style={{
@@ -60,7 +60,7 @@ function Home({ summary, recentActivity }) {
         </div>
       </Tilt>
 
-      {/* Metric Grid */}
+      {}
       <div
         style={{
           display: "grid",
@@ -98,7 +98,7 @@ function Home({ summary, recentActivity }) {
         ))}
       </div>
 
-      {/* Pie and Bar Charts Side-by-Side */}
+      {}
       <div
         style={{
           display: "flex",
@@ -163,7 +163,7 @@ function Home({ summary, recentActivity }) {
         </Tilt>
       </div>
 
-      {/* Top Spending */}
+      {}
       {topSpending.length > 0 && (
         <Tilt tiltMaxAngleX={8} tiltMaxAngleY={8} scale={1.02}>
           <div
@@ -197,7 +197,7 @@ function Home({ summary, recentActivity }) {
         </Tilt>
       )}
 
-      {/* Recent Rewards Timeline */}
+      {}
       <Tilt tiltMaxAngleX={8} tiltMaxAngleY={8} scale={1.02}>
         <div
           style={{
