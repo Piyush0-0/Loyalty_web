@@ -1,4 +1,5 @@
-/* General */
+
+/* === General === */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -10,10 +11,9 @@ body {
   height: 100vh;
 }
 
-/* Sidebar */
+/* === Sidebar === */
 .sidebar {
   width: 15%;
-  background-color: #f5f5f5;
   padding: 20px 10px;
   display: flex;
   flex-direction: column;
@@ -21,6 +21,7 @@ body {
   box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
   box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .search-input {
@@ -43,36 +44,74 @@ body {
   font-size: 14px;
 }
 
-.menu-item {
+.menu-item,
+.sub-option {
   width: 100%;
-  box-sizing: border-box;
   padding: 12px 10px;
-  background-color: white;
-  color: black;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
   cursor: pointer;
   font-weight: 500;
   text-align: center;
-  transition: all 0.2s ease;
-  white-space: nowrap;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  color: black;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
-.menu-item:hover {
+
+.menu-item::before,
+.sub-option::before,
+.glassy-btn::before,
+.claim-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  height: 100%;
+  width: 200%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0.3) 100%
+  );
+  transform: skewX(-20deg);
+  transition: all 0.6s ease;
+}
+
+.menu-item:hover::before,
+.sub-option:hover::before,
+.claim-btn:hover::before {
+  left: 100%;
+}
+
+.menu-item:hover,
+.sub-option:hover {
   transform: scale(1.03);
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
+
 .menu-item.active {
   background-color: #333;
   color: white;
 }
 
-/* Main Area */
+.dropdown-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: -5px;
+  gap: 6px;
+}
+
+/* === Main Area === */
 .main-area {
   width: 85%;
   display: flex;
   flex-direction: column;
 }
 
-/* Topbar */
 .topbar {
   height: 10%;
   display: flex;
@@ -87,14 +126,13 @@ body {
   font-size: 16px;
 }
 
-/* Content Area */
 .content {
   flex-grow: 1;
   padding: 20px;
   overflow-y: auto;
 }
 
-/* Dashboard Section */
+/* === Dashboard === */
 .dashboard {
   display: flex;
   flex-direction: column;
@@ -117,55 +155,13 @@ body {
   line-height: 1.5;
   transition: all 0.3s ease;
 }
+
 .card:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Recent Activity */
-.recent-activity {
-  display: flex;
-  gap: 30px;
-}
-.activity-column {
-  flex: 1;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-.activity-item {
-  margin-top: 15px;
-  padding: 10px 0;
-  border-bottom: 1px solid #ddd;
-  transition: background-color 0.2s ease;
-}
-.activity-item:hover {
-  background-color: #f0f0f0;
-  border-radius: 8px;
-}
-.date {
-  font-size: 13px;
-  color: #999;
-}
-.desc {
-  font-weight: 500;
-  margin: 5px 0;
-}
-.by {
-  font-size: 12px;
-  color: #777;
-}
-.points {
-  font-size: 14px;
-  font-weight: bold;
-  color: green;
-}
-.points.negative {
-  color: red;
-}
-
-/* Rewards Section */
+/* === Rewards & SpendPoints === */
 .rewards-grid {
   display: flex;
   flex-wrap: wrap;
@@ -184,26 +180,32 @@ body {
   position: relative;
 }
 
+/* === Claim / Spend Button === */
 .claim-btn {
-  background: black;
-  color: white;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: black;
   padding: 10px 20px;
-  border: none;
   font-weight: bold;
   font-size: 14px;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
 }
+
 .claim-btn:hover {
-  background-color: #444;
   transform: scale(1.05);
+  background-color: rgba(255, 255, 255, 0.25);
 }
+
 .claim-btn:active {
   transform: scale(0.95);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3) inset;
 }
 
+/* === Popup Animation === */
 .popup-overlay {
   position: absolute;
   top: 40%;
@@ -238,36 +240,7 @@ body {
   to { opacity: 0; transform: scale(0.8); }
 }
 
-/* Analytics / History / Forms */
-.analytics-placeholder,
-.history-table,
-.form-area {
-  padding: 20px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.05);
-}
-
-/* History Table */
-.history-table table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-.history-table th,
-.history-table td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: left;
-}
-.history-table tbody tr {
-  transition: background-color 0.2s ease;
-}
-.history-table tbody tr:hover {
-  background-color: #f7f7f7;
-}
-
-/* Forms */
+/* === Forms / Tables === */
 .form-area input,
 .form-area select {
   width: 100%;
@@ -278,16 +251,142 @@ body {
   border-radius: 6px;
   box-sizing: border-box;
 }
+
 .form-area .claim-btn {
   transition: all 0.3s ease;
 }
+
 .form-area .claim-btn:hover {
   transform: scale(1.03);
   background-color: #222;
 }
 
-/* Pie chart legend tweak */
+.analytics-placeholder,
+.history-table,
+.form-area {
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+}
+
+.history-table table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.history-table th,
+.history-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.history-table tbody tr:hover {
+  background-color: #f7f7f7;
+}
+
 .recharts-legend-item {
   font-size: 14px;
 }
 
+/* === Animate Form Entry === */
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* === Logout Popup === */
+.logout-popup {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.25);
+  padding: 30px 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  text-align: center;
+  z-index: 9999;
+  animation: fadeInUp 0.4s ease;
+}
+.logout-popup h3 {
+  margin-bottom: 25px;
+  font-size: 20px;
+  color: #222;
+}
+.logout-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+.logout-buttons .glassy-btn {
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* === Login Page Overlay === */
+.login-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.6s ease;
+}
+
+.login-box {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 40px 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  width: 320px;
+  text-align: center;
+  animation: floatUp 0.6s ease;
+}
+
+.login-box h2 {
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.login-box p {
+  margin-bottom: 25px;
+  font-size: 14px;
+  color: #555;
+}
+
+.login-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 18px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes floatUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

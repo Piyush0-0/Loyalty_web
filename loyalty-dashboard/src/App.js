@@ -11,24 +11,26 @@ import Analytics from "./components/Analytics";
 import History from "./components/History";
 import UserSetup from "./components/UserSetup";
 import Settings from "./components/Settings";
+import ChangeUser from "./components/ChangeUser";
+import UpdateProfile from "./components/UpdateProfile";
+import LogoutPopup from "./components/Logout";
 
 function App() {
   const [activeSection, setActiveSection] = useState("Home");
   const [searchTerm, setSearchTerm] = useState("");
 
   const [rewardsList, setRewardsList] = useState([
-  { id: 1, title: "10% Off Coupon", cost: 100 },
-  { id: 2, title: "Free Coffee", cost: 150 },
-  { id: 3, title: "Movie Ticket", cost: 300 },
-  { id: 4, title: "₹100 Gift Card", cost: 500 },
-  { id: 5, title: "Mobile Data Pack", cost: 250 },
-  { id: 6, title: "Pizza Voucher", cost: 400 },
-  { id: 7, title: "Music Subscription", cost: 350 },
-  { id: 8, title: "Online Course Coupon", cost: 600 },
-  { id: 9, title: "Gym Day Pass", cost: 200 },
-  { id: 10, title: "Amazon Gift Card", cost: 700 },
-]);
-
+    { id: 1, title: "10% Off Coupon", cost: 100 },
+    { id: 2, title: "Free Coffee", cost: 150 },
+    { id: 3, title: "Movie Ticket", cost: 300 },
+    { id: 4, title: "₹100 Gift Card", cost: 500 },
+    { id: 5, title: "Mobile Data Pack", cost: 250 },
+    { id: 6, title: "Pizza Voucher", cost: 400 },
+    { id: 7, title: "Music Subscription", cost: 350 },
+    { id: 8, title: "Online Course Coupon", cost: 600 },
+    { id: 9, title: "Gym Day Pass", cost: 200 },
+    { id: 10, title: "Amazon Gift Card", cost: 700 },
+  ]);
 
   const [spendList, setSpendList] = useState([
     { id: 1, title: "Notebook", cost: 200 },
@@ -79,19 +81,28 @@ function App() {
 
         setRecentActivity({
           offers: earned.map((t) => ({
-            date: new Date(t.date).toLocaleDateString("en-IN", { month: "short", day: "2-digit" }),
+            date: new Date(t.date).toLocaleDateString("en-IN", {
+              month: "short",
+              day: "2-digit",
+            }),
             title: t.description,
             by: "Customer",
             points: t.points,
           })),
           rewards: redeemed.map((t) => ({
-            date: new Date(t.date).toLocaleDateString("en-IN", { month: "short", day: "2-digit" }),
+            date: new Date(t.date).toLocaleDateString("en-IN", {
+              month: "short",
+              day: "2-digit",
+            }),
             title: t.description,
             by: "Customer",
             points: -t.points,
           })),
           spent: spent.map((t) => ({
-            date: new Date(t.date).toLocaleDateString("en-IN", { month: "short", day: "2-digit" }),
+            date: new Date(t.date).toLocaleDateString("en-IN", {
+              month: "short",
+              day: "2-digit",
+            }),
             title: t.description,
             by: "Customer",
             points: -t.points,
@@ -119,7 +130,10 @@ function App() {
         offers: [
           ...prev.offers,
           {
-            date: new Date().toLocaleDateString("en-IN", { month: "short", day: "2-digit" }),
+            date: new Date().toLocaleDateString("en-IN", {
+              month: "short",
+              day: "2-digit",
+            }),
             title: reward.title,
             by: "Customer",
             points: reward.cost,
@@ -145,7 +159,10 @@ function App() {
         spent: [
           ...prev.spent,
           {
-            date: new Date().toLocaleDateString("en-IN", { month: "short", day: "2-digit" }),
+            date: new Date().toLocaleDateString("en-IN", {
+              month: "short",
+              day: "2-digit",
+            }),
             title: item.title,
             by: "Customer",
             points: -item.cost,
@@ -175,17 +192,32 @@ function App() {
             <Home summary={summary} recentActivity={recentActivity} />
           )}
           {activeSection === "Rewards" && (
-            <Rewards rewardsList={rewardsList} points={points} handleClaim={handleClaim} />
+            <Rewards
+              rewardsList={rewardsList}
+              points={points}
+              handleClaim={handleClaim}
+            />
           )}
           {activeSection === "Spend Points" && (
-            <SpendPoints spendList={spendList} points={points} handleSpend={handleSpend} />
+            <SpendPoints
+              spendList={spendList}
+              points={points}
+              handleSpend={handleSpend}
+            />
           )}
           {activeSection === "Analytics" && (
             <Analytics recentActivity={recentActivity} points={points} />
           )}
-          {activeSection === "History" && <History recentActivity={recentActivity} />}
+          {activeSection === "History" && (
+            <History recentActivity={recentActivity} />
+          )}
           {activeSection === "User Setup" && <UserSetup />}
           {activeSection === "Settings" && <Settings />}
+          {activeSection === "Change User" && <ChangeUser />}
+          {activeSection === "Update Profile" && <UpdateProfile />}
+          {activeSection === "Logout" && (
+            <LogoutPopup setActiveSection={setActiveSection} />
+          )}
         </div>
       </div>
     </div>
