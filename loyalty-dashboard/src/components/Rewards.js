@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "../App.css";
 
 function Rewards({ rewardsList, points, handleClaim }) {
-  const [claimed, setClaimed] = useState([]);
   const [ashButtons, setAshButtons] = useState([]);
   const [ashCards, setAshCards] = useState([]);
   const [expiryTimes, setExpiryTimes] = useState({});
@@ -41,7 +40,7 @@ function Rewards({ rewardsList, points, handleClaim }) {
   }, [expiryTimes]);
 
   const handleAnimatedClaim = (id) => {
-    if (claimed.includes(id)) return;
+    if (ashButtons.includes(id)) return;
 
     setAshButtons((prev) => [...prev, id]);
 
@@ -50,8 +49,7 @@ function Rewards({ rewardsList, points, handleClaim }) {
     }, 1000);
 
     setTimeout(() => {
-      setClaimed((prev) => [...prev, id]);
-      handleClaim(id);
+      handleClaim(id); // triggers removal in App.js
     }, 2000);
   };
 
@@ -69,13 +67,10 @@ function Rewards({ rewardsList, points, handleClaim }) {
       }}
     >
       {rewardsList.map((reward, index) => {
-        const isClaimed = claimed.includes(reward.id);
         const isAshCard = ashCards.includes(reward.id);
         const isAshButton = ashButtons.includes(reward.id);
         const timer = timeLeft[reward.id];
         const isUrgent = timer?.urgent;
-
-        if (isClaimed) return null;
 
         return (
           <div
@@ -86,16 +81,17 @@ function Rewards({ rewardsList, points, handleClaim }) {
               justifyContent: "space-between",
               alignItems: "center",
               background: rowColors[index % rowColors.length],
-              padding: "14px 20px",
+              padding: "20px",
               borderRadius: "14px",
               boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-              width: "100%",
+              width: "96%",
               position: "relative",
               transition: "all 0.4s ease",
               fontFamily: "Arial, sans-serif",
               fontSize: "14px",
               fontWeight: 500,
               color: "#222",
+              minHeight: "110px",
             }}
           >
             <div style={{ flex: 1 }}>

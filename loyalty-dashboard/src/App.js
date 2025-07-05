@@ -17,6 +17,7 @@ import LogoutPopup from "./components/Logout";
 function App() {
   const [activeSection, setActiveSection] = useState("Home");
   const [searchTerm, setSearchTerm] = useState("");
+  const [theme, setTheme] = useState("Light");
 
   const [rewardsList, setRewardsList] = useState([
     { id: 1, title: "10% Off Coupon", cost: 100 },
@@ -60,13 +61,16 @@ function App() {
     pointsEarned: points,
   };
 
-  const filteredSections = Object.entries(menuSections).reduce((acc, [section, items]) => {
-    const filteredItems = items.filter((item) =>
-      item.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    if (filteredItems.length > 0) acc[section] = filteredItems;
-    return acc;
-  }, {});
+  const filteredSections = Object.entries(menuSections).reduce(
+    (acc, [section, items]) => {
+      const filteredItems = items.filter((item) =>
+        item.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      if (filteredItems.length > 0) acc[section] = filteredItems;
+      return acc;
+    },
+    {}
+  );
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -174,7 +178,13 @@ function App() {
   };
 
   return (
-    <div className="app-container">
+    <div
+      className="app-container"
+      style={{
+        backgroundColor: theme === "Dark" ? "#121212" : "#fff",
+        color: theme === "Dark" ? "#e0e0e0" : "#000",
+      }}
+    >
       <Sidebar
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -184,23 +194,35 @@ function App() {
       />
 
       <div className="main-area">
-        <Topbar username="Piyush" />
+        <Topbar username="Piyush" theme={theme} />
 
         <div className="content">
           {activeSection === "Home" && (
             <Home summary={summary} recentActivity={recentActivity} />
           )}
           {activeSection === "Rewards" && (
-            <Rewards rewardsList={rewardsList} points={points} handleClaim={handleClaim} />
+            <Rewards
+              rewardsList={rewardsList}
+              points={points}
+              handleClaim={handleClaim}
+            />
           )}
           {activeSection === "Spend Points" && (
-            <SpendPoints spendList={spendList} points={points} handleSpend={handleSpend} />
+            <SpendPoints
+              spendList={spendList}
+              points={points}
+              handleSpend={handleSpend}
+            />
           )}
           {activeSection === "Analytics" && (
             <Analytics recentActivity={recentActivity} points={points} />
           )}
-          {activeSection === "History" && <History recentActivity={recentActivity} />}
-          {activeSection === "Settings" && <Settings />}
+          {activeSection === "History" && (
+            <History recentActivity={recentActivity} />
+          )}
+          {activeSection === "Settings" && (
+            <Settings theme={theme} setTheme={setTheme} />
+          )}
           {activeSection === "Change User" && (
             <ChangeUser setActiveSection={setActiveSection} />
           )}
