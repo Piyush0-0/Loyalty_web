@@ -142,4 +142,5 @@ function Rewards({ rewardsList, points, handleClaim }) {
   );
 }
 
+
 export default Rewards;
