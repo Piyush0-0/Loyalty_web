@@ -11,7 +11,6 @@ import {
   YAxis,
   Legend,
 } from "recharts";
-import Tilt from "react-parallax-tilt";
 
 function Home({ summary, recentActivity }) {
   const redeemedPoints = recentActivity.rewards.reduce((sum, t) => sum + Math.abs(t.points), 0);
@@ -42,25 +41,21 @@ function Home({ summary, recentActivity }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
-      {}
-      <Tilt tiltMaxAngleX={10} tiltMaxAngleY={10} scale={1.02}>
-        <div
-          style={{
-            background: "#fff",
-            color: "#4CAF50",
-            textAlign: "center",
-            fontSize: "32px",
-            padding: "30px",
-            borderRadius: "20px",
-            boxShadow: "0 0 25px rgba(0,0,0,0.1)",
-            fontWeight: "bold",
-          }}
-        >
-          🏆 Current Points: {summary.pointsEarned}
-        </div>
-      </Tilt>
+      <div
+        style={{
+          background: "#fff",
+          color: "#4CAF50",
+          textAlign: "center",
+          fontSize: "32px",
+          padding: "30px",
+          borderRadius: "20px",
+          boxShadow: "0 0 25px rgba(0,0,0,0.1)",
+          fontWeight: "bold",
+        }}
+      >
+        🏆 Current Points: {summary.pointsEarned}
+      </div>
 
-      {}
       <div
         style={{
           display: "grid",
@@ -74,14 +69,8 @@ function Home({ summary, recentActivity }) {
           { icon: "🎁", value: summary.rewardsGiven, label: "Rewards" },
           { icon: "📊", value: recentActivity.spent.length, label: "Purchases" },
         ].map((card, i) => (
-          <Tilt
+          <div
             key={i}
-            glareEnable={true}
-            glareMaxOpacity={0.2}
-            scale={1.05}
-            transitionSpeed={1500}
-            tiltMaxAngleX={10}
-            tiltMaxAngleY={10}
             style={{
               backgroundColor: "#e7d1e8",
               borderRadius: "15px",
@@ -94,11 +83,10 @@ function Home({ summary, recentActivity }) {
             <div style={{ fontSize: "24px" }}>{card.icon}</div>
             <div style={{ fontSize: "20px" }}>{card.value}</div>
             <div style={{ fontSize: "14px" }}>{card.label}</div>
-          </Tilt>
+          </div>
         ))}
       </div>
 
-      {}
       <div
         style={{
           display: "flex",
@@ -107,7 +95,7 @@ function Home({ summary, recentActivity }) {
           justifyContent: "space-between",
         }}
       >
-        <Tilt tiltMaxAngleX={10} tiltMaxAngleY={10} scale={1.02} style={{ flex: 1, minWidth: 300 }}>
+        <div style={{ flex: 1, minWidth: 300 }}>
           <div
             style={{
               background: "#fff",
@@ -136,9 +124,9 @@ function Home({ summary, recentActivity }) {
               </PieChart>
             </ResponsiveContainer>
           </div>
-        </Tilt>
+        </div>
 
-        <Tilt tiltMaxAngleX={10} tiltMaxAngleY={10} scale={1.02} style={{ flex: 1, minWidth: 300 }}>
+        <div style={{ flex: 1, minWidth: 300 }}>
           <div
             style={{
               background: "#fff",
@@ -160,45 +148,10 @@ function Home({ summary, recentActivity }) {
               </BarChart>
             </ResponsiveContainer>
           </div>
-        </Tilt>
+        </div>
       </div>
 
-      {}
       {topSpending.length > 0 && (
-        <Tilt tiltMaxAngleX={8} tiltMaxAngleY={8} scale={1.02}>
-          <div
-            style={{
-              backgroundColor: "#fff",
-              padding: "20px",
-              borderRadius: "12px",
-              boxShadow: "0 3px 6px rgba(0,0,0,0.05)",
-            }}
-          >
-            <h3>💸 Top Spent Items</h3>
-            <ul style={{ listStyle: "none", padding: 0 }}>
-              {topSpending.map((item, index) => (
-                <li
-                  key={index}
-                  style={{
-                    marginBottom: "15px",
-                    padding: "10px 0",
-                    borderBottom: "1px solid #eee",
-                  }}
-                >
-                  <div style={{ fontSize: "13px", color: "#999" }}>{item.date}</div>
-                  <div style={{ fontWeight: "bold" }}>{item.title}</div>
-                  <div style={{ fontSize: "14px", color: "red" }}>
-                    -{Math.abs(item.points)} Points
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Tilt>
-      )}
-
-      {}
-      <Tilt tiltMaxAngleX={8} tiltMaxAngleY={8} scale={1.02}>
         <div
           style={{
             backgroundColor: "#fff",
@@ -207,26 +160,55 @@ function Home({ summary, recentActivity }) {
             boxShadow: "0 3px 6px rgba(0,0,0,0.05)",
           }}
         >
-          <h3>🕒 Recently Earned Rewards</h3>
+          <h3>💸 Top Spent Items</h3>
           <ul style={{ listStyle: "none", padding: 0 }}>
-            {recentActivity.offers.slice(-5).reverse().map((item, index) => (
+            {topSpending.map((item, index) => (
               <li
                 key={index}
                 style={{
                   marginBottom: "15px",
                   padding: "10px 0",
                   borderBottom: "1px solid #eee",
-                  borderRadius: "8px",
                 }}
               >
                 <div style={{ fontSize: "13px", color: "#999" }}>{item.date}</div>
                 <div style={{ fontWeight: "bold" }}>{item.title}</div>
-                <div style={{ fontSize: "14px", color: "green" }}>+{item.points} Points</div>
+                <div style={{ fontSize: "14px", color: "red" }}>
+                  -{Math.abs(item.points)} Points
+                </div>
               </li>
             ))}
           </ul>
         </div>
-      </Tilt>
+      )}
+
+      <div
+        style={{
+          backgroundColor: "#fff",
+          padding: "20px",
+          borderRadius: "12px",
+          boxShadow: "0 3px 6px rgba(0,0,0,0.05)",
+        }}
+      >
+        <h3>🕒 Recently Earned Rewards</h3>
+        <ul style={{ listStyle: "none", padding: 0 }}>
+          {recentActivity.offers.slice(-5).reverse().map((item, index) => (
+            <li
+              key={index}
+              style={{
+                marginBottom: "15px",
+                padding: "10px 0",
+                borderBottom: "1px solid #eee",
+                borderRadius: "8px",
+              }}
+            >
+              <div style={{ fontSize: "13px", color: "#999" }}>{item.date}</div>
+              <div style={{ fontWeight: "bold" }}>{item.title}</div>
+              <div style={{ fontSize: "14px", color: "green" }}>+{item.points} Points</div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
