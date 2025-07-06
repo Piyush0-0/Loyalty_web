@@ -41,32 +41,14 @@ function Rewards({ rewardsList, points, handleClaim }) {
 
   const handleAnimatedClaim = (id) => {
     if (ashButtons.includes(id)) return;
-
     setAshButtons((prev) => [...prev, id]);
-
-    setTimeout(() => {
-      setAshCards((prev) => [...prev, id]);
-    }, 1000);
-
-    setTimeout(() => {
-      handleClaim(id); // triggers removal in App.js
-    }, 2000);
+    setTimeout(() => setAshCards((prev) => [...prev, id]), 300);
+    setTimeout(() => handleClaim(id), 800);
   };
 
-  const rowColors = ["#fce4ec", "#e3f2fd", "#e8f5e9", "#fff3e0"];
-
   return (
-    <div
-      className="rewards-grid"
-      style={{
-        width: "100%",
-        padding: "10px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "15px",
-      }}
-    >
-      {rewardsList.map((reward, index) => {
+    <div className="rewards-grid" style={{ width: "100%", padding: "10px", display: "flex", flexDirection: "column", gap: "15px" }}>
+      {rewardsList.map((reward) => {
         const isAshCard = ashCards.includes(reward.id);
         const isAshButton = ashButtons.includes(reward.id);
         const timer = timeLeft[reward.id];
@@ -75,53 +57,40 @@ function Rewards({ rewardsList, points, handleClaim }) {
         return (
           <div
             key={reward.id}
-            className={`reward-row ${isAshCard ? "fadeCardOut" : ""}`}
+            className={`card reward-row ${isAshCard ? "fadeToAshes" : ""}`}
             style={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              background: rowColors[index % rowColors.length],
-              padding: "20px",
-              borderRadius: "14px",
-              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-              width: "96%",
-              position: "relative",
-              transition: "all 0.4s ease",
-              fontFamily: "Arial, sans-serif",
-              fontSize: "14px",
-              fontWeight: 500,
-              color: "#222",
+              width: "100%",
               minHeight: "110px",
+              background: "#e3eaf4",
+              border: "1px solid #d0d8e2",
+              color: "#1a237e",
             }}
           >
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: "16px", fontWeight: "bold" }}>
-                {reward.title}
-              </div>
+              <div style={{ fontSize: "16px", fontWeight: "bold" }}>{reward.title}</div>
               <div>{reward.cost} Points</div>
             </div>
 
-            <div
-              style={{
-                flex: 1,
-                textAlign: "center",
-                color: isUrgent ? "#d32f2f" : "#000",
-                fontWeight: "bold",
-                animation: isUrgent ? "pulseText 1.2s infinite" : "none",
-              }}
-            >
+            <div style={{
+              flex: 1,
+              textAlign: "center",
+              color: isUrgent ? "#d32f2f" : "#1a237e",
+              fontWeight: "bold",
+              animation: isUrgent ? "pulseText 1.2s infinite" : "none",
+            }}>
               {timer ? timer.text : "Expires in: --"}
             </div>
 
-            <div
-              style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}
-            >
+            <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
               <button
                 className={`claim-btn ${isAshButton ? "fadeToAshes" : ""}`}
                 onClick={() => handleAnimatedClaim(reward.id)}
                 disabled={points < reward.cost || isAshButton}
                 style={{
-                  background: "#1565c0",
+                  background: "#1a237e",
                   border: "none",
                   color: "#fff",
                   padding: "6px 10px",
@@ -141,6 +110,5 @@ function Rewards({ rewardsList, points, handleClaim }) {
     </div>
   );
 }
-
 
 export default Rewards;

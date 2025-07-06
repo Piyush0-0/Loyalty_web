@@ -75,6 +75,7 @@ body {
   );
   transform: skewX(-20deg);
   transition: all 0.6s ease;
+  pointer-events: none;
 }
 
 .menu-item:hover::before,
@@ -133,150 +134,90 @@ body {
   gap: 30px;
 }
 
-.summary-cards {
+.summary-row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.summary-block {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.summary-value {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.summary-subtext {
+  color: green;
+  font-size: 14px;
+}
+
+.metrics-row {
+  display: flex;
+  gap: 20px;
+}
+
+.metrics-box {
+  flex: 1;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.three-column-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
 }
 
 .card {
-  background-color: thistle;
+  background-color: #f4f6fa;
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-  font-weight: bold;
-  text-align: center;
-  line-height: 1.5;
-  transition: all 0.3s ease;
+  border-radius: 14px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform, box-shadow;
 }
 
 .card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
-.rewards-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px 40px;
+.reward-row.fadeToAshes {
+  animation: puffOut 0.4s forwards;
 }
 
-.reward-row {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: linear-gradient(145deg, #e0e0e0, #c8c8c8);
-  border-radius: 14px;
-  padding: 16px 24px;
-  position: relative;
-  transition: all 0.4s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.reward-title {
-  font-size: 18px;
-  font-weight: bold;
-  color: #222;
-}
-
-.reward-cost {
-  font-size: 16px;
-  font-weight: 500;
-  color: #555;
-  margin-left: 10px;
-}
-
-.reward-timer {
-  font-size: 14px;
-  font-weight: bold;
-  margin: 0 10px;
-  color: black;
-}
-
-.reward-timer.red {
-  color: red;
-  animation: pulseText 1.2s infinite;
-}
-
-.claim-btn {
-  padding: 8px 16px;
-  font-size: 13px;
-  font-weight: bold;
-  border-radius: 8px;
-  border: none;
-  background-color: #4caf50;
-  color: white;
-  cursor: pointer;
-  transition: all 0.4s ease;
-  position: relative;
-  overflow: hidden;
-  min-width: 80px;
-}
-
-.claim-btn:hover {
-  transform: scale(1.06);
-  background-color: #43a047;
-}
-
-.claim-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.blast {
-  animation: fadeToAshes 0.8s forwards;
-  background-color: #f44336 !important;
-  color: white;
-}
-
-.reward-row.fadeCard {
-  animation: darkenAndFade 0.8s ease-out forwards;
-}
-
-/* Animations */
-
-@keyframes fadeToAshes {
+@keyframes puffOut {
   0% {
+    opacity: 1;
     transform: scale(1);
-    opacity: 1;
-    filter: grayscale(0%);
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.7;
-    filter: grayscale(50%);
   }
   100% {
-    transform: scale(0.1);
     opacity: 0;
-    filter: grayscale(100%);
+    transform: scale(0.8);
   }
 }
 
-@keyframes darkenAndFade {
-  0% {
-    opacity: 1;
-    background-color: inherit;
-  }
-  50% {
-    background-color: #333;
-    color: white;
-    opacity: 0.9;
-  }
-  100% {
-    background-color: #000;
-    color: white;
-    opacity: 0;
-    transform: scale(0.9);
-  }
+.two-column-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
 }
 
-@keyframes pulseText {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.08); }
-  100% { transform: scale(1); }
+.loyalty-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
 }
 
 .analytics-placeholder,
@@ -337,6 +278,17 @@ body {
   border-radius: 8px;
   font-size: 14px;
   cursor: pointer;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .login-overlay {

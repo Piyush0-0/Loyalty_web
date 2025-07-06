@@ -1,213 +1,199 @@
+// Home.js
 import React from "react";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Legend,
-} from "recharts";
+import "../App.css";
 
 function Home({ summary, recentActivity }) {
-  const redeemedPoints = recentActivity.rewards.reduce((sum, t) => sum + Math.abs(t.points), 0);
-  const spentPoints = recentActivity.spent.reduce((sum, t) => sum + Math.abs(t.points), 0);
-  const totalSpent = redeemedPoints + spentPoints;
-  const currentPoints = summary.pointsEarned;
-  const earnedPoints = currentPoints + totalSpent;
+  const totalEarned = recentActivity.offers.reduce((sum, t) => sum + t.points, 0);
+  const totalSpent = recentActivity.spent.reduce((sum, t) => sum + Math.abs(t.points), 0);
+  const totalRedeemed = recentActivity.rewards.reduce((sum, t) => sum + Math.abs(t.points), 0);
 
-  const pieChartData = [
-    { name: "Earned", value: earnedPoints },
-    { name: "Spent", value: totalSpent },
-  ];
-
-  const COLORS = ["#4CAF50", "#F44336"];
-
-  const stackedBarData = [
-    {
-      name: "Points",
-      Earned: earnedPoints,
-      Redeemed: redeemedPoints,
-      Spent: spentPoints,
+  const chartEarnSpend = encodeURIComponent(JSON.stringify({
+    type: "bar",
+    data: {
+      labels: ["Earned", "Spent"],
+      datasets: [
+        {
+          label: "Points",
+          data: [totalEarned, totalSpent],
+          backgroundColor: ["#4caf50", "#f44336"],
+        },
+      ],
     },
-  ];
+  }));
 
-  const topSpending = [...recentActivity.spent]
-    .sort((a, b) => Math.abs(b.points) - Math.abs(a.points))
-    .slice(0, 3);
+  const chartDistribution = encodeURIComponent(JSON.stringify({
+    type: "doughnut",
+    data: {
+      labels: ["Earned", "Spent", "Redeemed"],
+      datasets: [
+        {
+          data: [totalEarned, totalSpent, totalRedeemed],
+          backgroundColor: ["#4caf50", "#f44336", "#2196f3"],
+        },
+      ],
+    },
+  }));
+
+  const sortedPoints = [...recentActivity.offers, ...recentActivity.spent, ...recentActivity.rewards]
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .slice(-6);
+
+  const chartPointsOverTime = encodeURIComponent(JSON.stringify({
+    type: "line",
+    data: {
+      labels: sortedPoints.map((t) => t.date),
+      datasets: [
+        {
+          label: "Points",
+          data: sortedPoints.map((t) => t.points),
+          fill: true,
+          borderColor: "#3f51b5",
+          backgroundColor: "rgba(63,81,181,0.1)",
+        },
+      ],
+    },
+  }));
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
-      <div
-        style={{
-          background: "#fff",
-          color: "#4CAF50",
-          textAlign: "center",
-          fontSize: "32px",
-          padding: "30px",
-          borderRadius: "20px",
-          boxShadow: "0 0 25px rgba(0,0,0,0.1)",
-          fontWeight: "bold",
-        }}
-      >
-        🏆 Current Points: {summary.pointsEarned}
-      </div>
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-          gap: "20px",
-        }}
-      >
-        {[
-          { icon: "👥", value: summary.membersEnrolled, label: "Members" },
-          { icon: "🎯", value: summary.offersCompleted, label: "Offers" },
-          { icon: "🎁", value: summary.rewardsGiven, label: "Rewards" },
-          { icon: "📊", value: recentActivity.spent.length, label: "Purchases" },
-        ].map((card, i) => (
-          <div
-            key={i}
-            style={{
-              backgroundColor: "#e7d1e8",
-              borderRadius: "15px",
-              padding: "20px",
-              textAlign: "center",
-              fontWeight: "bold",
-              boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
-            }}
-          >
-            <div style={{ fontSize: "24px" }}>{card.icon}</div>
-            <div style={{ fontSize: "20px" }}>{card.value}</div>
-            <div style={{ fontSize: "14px" }}>{card.label}</div>
-          </div>
-        ))}
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "30px",
-          justifyContent: "space-between",
-        }}
-      >
-        <div style={{ flex: 1, minWidth: 300 }}>
-          <div
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "12px",
-              boxShadow: "0 3px 6px rgba(0,0,0,0.05)",
-            }}
-          >
-            <h3 style={{ marginBottom: "10px" }}>Points Breakdown (Pie)</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={pieChartData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={100}
-                  label
-                >
-                  {pieChartData.map((_, index) => (
-                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
+    <div className="dashboard">
+      {/* Summary Row */}
+      <div className="summary-row">
+        <div className="summary-block">
+          <h4>Total Points</h4>
+          <p className="summary-value">{summary.pointsEarned || 0}</p>
+          <span className="summary-subtext">Your current balance</span>
         </div>
-
-        <div style={{ flex: 1, minWidth: 300 }}>
-          <div
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "12px",
-              boxShadow: "0 3px 6px rgba(0,0,0,0.05)",
-            }}
-          >
-            <h3 style={{ marginBottom: "10px" }}>Points Distribution (Stacked Bar)</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={stackedBarData} layout="vertical">
-                <XAxis type="number" />
-                <YAxis type="category" dataKey="name" />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="Earned" stackId="a" fill="#4CAF50" />
-                <Bar dataKey="Redeemed" stackId="a" fill="#FF9800" />
-                <Bar dataKey="Spent" stackId="a" fill="#F44336" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+        <div className="summary-block">
+          <h4>Offers Completed</h4>
+          <p className="summary-value">{summary.offersCompleted}</p>
+          <span className="summary-subtext">Earned rewards</span>
+        </div>
+        <div className="summary-block">
+          <h4>Rewards Redeemed</h4>
+          <p className="summary-value">{summary.rewardsGiven}</p>
+          <span className="summary-subtext">Used your points</span>
+        </div>
+        <div className="summary-block">
+          <h4>Items Purchased</h4>
+          <p className="summary-value">{summary.spentItems}</p>
+          <span className="summary-subtext">Spent through loyalty</span>
         </div>
       </div>
 
-      {topSpending.length > 0 && (
-        <div
-          style={{
-            backgroundColor: "#fff",
-            padding: "20px",
-            borderRadius: "12px",
-            boxShadow: "0 3px 6px rgba(0,0,0,0.05)",
-          }}
-        >
-          <h3>💸 Top Spent Items</h3>
-          <ul style={{ listStyle: "none", padding: 0 }}>
-            {topSpending.map((item, index) => (
-              <li
-                key={index}
-                style={{
-                  marginBottom: "15px",
-                  padding: "10px 0",
-                  borderBottom: "1px solid #eee",
-                }}
-              >
-                <div style={{ fontSize: "13px", color: "#999" }}>{item.date}</div>
-                <div style={{ fontWeight: "bold" }}>{item.title}</div>
-                <div style={{ fontSize: "14px", color: "red" }}>
-                  -{Math.abs(item.points)} Points
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {/* Recent Transactions (Tabular View with Alternating Colors) */}
+      <div className="metrics-box">
+        <h4 style={{ marginBottom: "15px" }}>Recent Transactions</h4>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "14px" }}>
+          <thead>
+            <tr style={{ background: "#e0e7ff", textAlign: "left" }}>
+              <th style={{ padding: "10px", borderBottom: "1px solid #ccc" }}>Title</th>
+              <th style={{ padding: "10px", borderBottom: "1px solid #ccc" }}>Points</th>
+              <th style={{ padding: "10px", borderBottom: "1px solid #ccc" }}>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[...recentActivity.offers, ...recentActivity.rewards, ...recentActivity.spent]
+              .sort((a, b) => new Date(b.date) - new Date(a.date))
+              .slice(0, 3)
+              .map((entry, index) => {
+                const formattedDate = new Date(entry.date).toLocaleString("en-IN", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                  hour12: true,
+                });
 
-      <div
-        style={{
-          backgroundColor: "#fff",
-          padding: "20px",
-          borderRadius: "12px",
-          boxShadow: "0 3px 6px rgba(0,0,0,0.05)",
-        }}
-      >
-        <h3>🕒 Recently Earned Rewards</h3>
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          {recentActivity.offers.slice(-5).reverse().map((item, index) => (
-            <li
-              key={index}
-              style={{
-                marginBottom: "15px",
-                padding: "10px 0",
-                borderBottom: "1px solid #eee",
-                borderRadius: "8px",
-              }}
-            >
-              <div style={{ fontSize: "13px", color: "#999" }}>{item.date}</div>
-              <div style={{ fontWeight: "bold" }}>{item.title}</div>
-              <div style={{ fontSize: "14px", color: "green" }}>+{item.points} Points</div>
-            </li>
-          ))}
-        </ul>
+                return (
+                  <tr
+                    key={index}
+                    style={{
+                      backgroundColor: index % 2 === 0 ? "#f8f9fc" : "#ffffff",
+                      borderBottom: "1px solid #eee",
+                    }}
+                  >
+                    <td style={{ padding: "10px" }}>{entry.title}</td>
+                    <td style={{ padding: "10px", color: entry.points > 0 ? "#4caf50" : "#f44336" }}>
+                      {entry.points > 0 ? "+" : ""}
+                      {entry.points} pts
+                    </td>
+                    <td style={{ padding: "10px", fontSize: "13px", color: "#555" }}>
+                      {formattedDate}
+                    </td>
+                  </tr>
+                );
+              })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Charts */}
+      <div className="three-column-grid">
+        <div className="card analysis-box">
+          <h4>Earned vs Spent Points</h4>
+          <img
+            src={`https://quickchart.io/chart?c=${chartEarnSpend}`}
+            alt="Earn vs Spend"
+            style={{ width: "100%", maxWidth: "300px" }}
+          />
+        </div>
+        <div className="card analysis-box">
+          <h4>Activity Distribution</h4>
+          <img
+            src={`https://quickchart.io/chart?c=${chartDistribution}`}
+            alt="Distribution"
+            style={{ width: "100%", maxWidth: "300px" }}
+          />
+        </div>
+        <div className="card">
+          <h4>Points Over Time</h4>
+          <img
+            src={`https://quickchart.io/chart?c=${chartPointsOverTime}`}
+            alt="Points Over Time"
+            style={{ width: "100%", maxWidth: "300px" }}
+          />
+        </div>
+      </div>
+
+      {/* Loyalty Summary */}
+      <div className="two-column-grid">
+        <div className="card loyalty-box">
+          <h4>Loyalty Summary</h4>
+          <div className="loyalty-row">
+            <div>
+              <strong>+1</strong>
+              <div>Member</div>
+            </div>
+            <div>
+              <strong>{summary.offersCompleted + summary.rewardsGiven + summary.spentItems}</strong>
+              <div>Total Activities</div>
+            </div>
+          </div>
+          <div className="loyalty-row">
+            <div>
+              <strong>{summary.pointsEarned}</strong>
+              <div>Points Earned</div>
+            </div>
+            <div>
+              <strong>{summary.spentItems}</strong>
+              <div>Items Bought</div>
+            </div>
+          </div>
+          <div className="loyalty-row">
+            <div>
+              <strong>{summary.rewardsGiven}</strong>
+              <div>Rewards Redeemed</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="card">
+          <h4>Total Points Summary</h4>
+          <h2>{summary.pointsEarned} pts</h2>
+          <span className="summary-subtext">Includes all earned and remaining</span>
+        </div>
       </div>
     </div>
   );

@@ -1,14 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 function UpdateProfile() {
-  const [name, setName] = useState("Piyush Samanta");
+  const [name, setName] = useState("Piyush");
   const [email, setEmail] = useState("piyush@gmail.com");
-  const [bio, setBio] = useState("");
+  const [bio, setBio] = useState("Full-stack enthusiast exploring rewards tech and gamified loyalty systems.");
   const [pronouns, setPronouns] = useState("Don't specify");
-  const [url, setUrl] = useState("");
-  const [profilePic, setProfilePic] = useState(
-    "https://i.pravatar.cc/150?img=3"
-  );
+  const [url, setUrl] = useState("https://Loyalty-dashboard.in/piyush");
+  const [profilePic, setProfilePic] = useState("https://i.pravatar.cc/150?img=3");
+  const fileInputRef = useRef(null);
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfilePic(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleUpdateProfile = () => {
+    const profileData = {
+      name,
+      email,
+      bio,
+      pronouns,
+      url,
+      profilePic,
+    };
+    console.log("Profile Saved:", profileData);
+    alert("Profile updated!");
+    // TODO: send `profileData` to backend
+  };
 
   const containerStyle = {
     padding: "30px",
@@ -81,6 +105,7 @@ function UpdateProfile() {
     height: "140px",
     borderRadius: "50%",
     border: "3px solid #30363d",
+    objectFit: "cover",
   };
 
   const editBtnStyle = {
@@ -152,12 +177,26 @@ function UpdateProfile() {
             style={inputStyle}
           />
 
-          <button style={buttonStyle}>Update Profile</button>
+          <button style={buttonStyle} onClick={handleUpdateProfile}>
+            Update Profile
+          </button>
         </div>
 
         <div style={profilePicSectionStyle}>
           <img src={profilePic} alt="Profile" style={profilePicStyle} />
-          <button style={editBtnStyle}>Edit</button>
+          <button
+            style={editBtnStyle}
+            onClick={() => fileInputRef.current.click()}
+          >
+            Edit
+          </button>
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleImageUpload}
+          />
         </div>
       </div>
     </div>

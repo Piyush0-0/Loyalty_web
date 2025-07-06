@@ -10,20 +10,14 @@ function SpendPoints({ spendList, points, handleSpend }) {
 
   const handleAnimatedSpend = (id) => {
     if (spentItems.includes(id)) return;
-
     setAshButtons((prev) => [...prev, id]);
-
-    setTimeout(() => {
-      setAshCards((prev) => [...prev, id]);
-    }, 1000);
-
+    setTimeout(() => setAshCards((prev) => [...prev, id]), 300);
     setTimeout(() => {
       setSpentItems((prev) => [...prev, id]);
       handleSpend(id);
-    }, 2000);
+    }, 800);
   };
 
-  const rowColors = ["#fce4ec", "#e3f2fd", "#e8f5e9", "#fff3e0"];
   const productIcons = {
     Notebook: "📓",
     Pen: "🖊️",
@@ -32,17 +26,8 @@ function SpendPoints({ spendList, points, handleSpend }) {
   };
 
   return (
-    <div
-      className="rewards-grid"
-      style={{
-        width: "100%",
-        padding: "10px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "15px",
-      }}
-    >
-      {spendList.map((item, index) => {
+    <div className="rewards-grid" style={{ width: "100%", padding: "10px", display: "flex", flexDirection: "column", gap: "15px" }}>
+      {spendList.map((item) => {
         const isSpent = spentItems.includes(item.id);
         const isAshCard = ashCards.includes(item.id);
         const isAshButton = ashButtons.includes(item.id);
@@ -54,29 +39,19 @@ function SpendPoints({ spendList, points, handleSpend }) {
         return (
           <div
             key={item.id}
-            className={`reward-row ${isAshCard ? "fadeCardOut" : ""}`}
+            className={`card reward-row ${isAshCard ? "fadeToAshes" : ""}`}
             style={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              background: rowColors[index % rowColors.length],
-              padding: "20px",
-              borderRadius: "14px",
-              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
               width: "100%",
-              position: "relative",
-              transition: "all 0.4s ease",
-              fontFamily: "Arial, sans-serif",
-              fontSize: "14px",
-              fontWeight: 500,
-              color: "#222",
-              opacity: isAshCard ? 0 : 1,
+              background: "#e3eaf4",
+              border: "1px solid #d0d8e2",
+              color: "#1a237e",
             }}
           >
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: "18px", fontWeight: "bold" }}>
-                {icon} {item.title}
-              </div>
+              <div style={{ fontSize: "18px", fontWeight: "bold" }}>{icon} {item.title}</div>
               <div>{item.cost} Points</div>
             </div>
 
@@ -86,16 +61,14 @@ function SpendPoints({ spendList, points, handleSpend }) {
 
             <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
               {insufficient ? (
-                <div
-                  style={{
-                    color: "crimson",
-                    fontWeight: "bold",
-                    padding: "6px 10px",
-                    borderRadius: "6px",
-                    fontSize: "13px",
-                    backgroundColor: "#fce4ec",
-                  }}
-                >
+                <div style={{
+                  color: "crimson",
+                  fontWeight: "bold",
+                  padding: "6px 10px",
+                  borderRadius: "6px",
+                  fontSize: "13px",
+                  backgroundColor: "#fce4ec",
+                }}>
                   Not enough points
                 </div>
               ) : (
