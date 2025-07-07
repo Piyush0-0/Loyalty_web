@@ -13,11 +13,16 @@ import Settings from "./components/Settings";
 import ChangeUser from "./components/ChangeUser";
 import UpdateProfile from "./components/UpdateProfile";
 import LogoutPopup from "./components/Logout";
+import TierPopup from "./components/TierPopup";
 
 function App() {
   const [activeSection, setActiveSection] = useState("Home");
   const [searchTerm, setSearchTerm] = useState("");
   const [theme, setTheme] = useState("Light");
+  const [points, setPoints] = useState(0);
+  const [totalEarnedPoints, setTotalEarnedPoints] = useState(0);
+  const [showTierPopup, setShowTierPopup] = useState(false);
+  const email = "piyushsamanta9885@gmail.com";
 
   const [rewardsList, setRewardsList] = useState([
     { id: 1, title: "10% Off Coupon", cost: 100 },
@@ -38,9 +43,6 @@ function App() {
     { id: 3, title: "Headphones", cost: 400 },
     { id: 4, title: "T-shirt", cost: 350 },
   ]);
-
-  const [points, setPoints] = useState(0);
-  const email = "piyushsamanta9885@gmail.com";
 
   const [recentActivity, setRecentActivity] = useState({
     offers: [],
@@ -72,6 +74,22 @@ function App() {
     {}
   );
 
+  const getTier = (points) => {
+    if (points >= 2000) return "Diamond";
+    if (points >= 1500) return "Platinum";
+    if (points >= 1000) return "Gold";
+    if (points >= 500) return "Silver";
+    return "Bronze";
+  };
+
+  const getNextTierPoints = (points) => {
+    if (points < 500) return 500;
+    if (points < 1000) return 1000;
+    if (points < 1500) return 1500;
+    if (points < 2000) return 2000;
+    return null;
+  };
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -81,6 +99,9 @@ function App() {
         const earned = user.transactions.filter((t) => t.type === "Earned");
         const redeemed = user.transactions.filter((t) => t.type === "Redeemed");
         const spent = user.transactions.filter((t) => t.type === "Spent");
+
+        const totalEarned = earned.reduce((sum, t) => sum + t.points, 0);
+        setTotalEarnedPoints(totalEarned);
 
         setRecentActivity({
           offers: earned.map((t) => ({
@@ -128,21 +149,34 @@ function App() {
       setPoints(updatedUser.points);
       setRewardsList((prev) => prev.filter((r) => r.id !== rewardId));
 
+      const dateStr = new Date().toLocaleDateString("en-IN", {
+        month: "short",
+        day: "2-digit",
+      });
+
       setRecentActivity((prev) => ({
         ...prev,
         offers: [
           ...prev.offers,
           {
-            date: new Date().toLocaleDateString("en-IN", {
-              month: "short",
-              day: "2-digit",
-            }),
+            date: dateStr,
             title: reward.title,
             by: "Customer",
             points: reward.cost,
           },
         ],
+        rewards: [
+          ...prev.rewards,
+          {
+            date: dateStr,
+            title: reward.title,
+            by: "Customer",
+            points: -reward.cost,
+          },
+        ],
       }));
+
+      setTotalEarnedPoints((prev) => prev + reward.cost);
     } catch (err) {
       console.error("Failed to claim reward", err);
     }
@@ -157,15 +191,17 @@ function App() {
       setPoints(updatedUser.points);
       setSpendList((prev) => prev.filter((i) => i.id !== itemId));
 
+      const dateStr = new Date().toLocaleDateString("en-IN", {
+        month: "short",
+        day: "2-digit",
+      });
+
       setRecentActivity((prev) => ({
         ...prev,
         spent: [
           ...prev.spent,
           {
-            date: new Date().toLocaleDateString("en-IN", {
-              month: "short",
-              day: "2-digit",
-            }),
+            date: dateStr,
             title: item.title,
             by: "Customer",
             points: -item.cost,
@@ -194,7 +230,13 @@ function App() {
       />
 
       <div className="main-area">
-        <Topbar username="Piyush" theme={theme} />
+        <Topbar
+          username="Piyush"
+          theme={theme}
+          totalEarnedPoints={totalEarnedPoints}
+          setActiveSection={setActiveSection}
+          onTierClick={() => setShowTierPopup(true)}
+        />
 
         <div className="content">
           {activeSection === "Home" && (
@@ -232,6 +274,16 @@ function App() {
           )}
         </div>
       </div>
+
+      {showTierPopup && (
+        <TierPopup
+          tier={getTier(totalEarnedPoints)}
+          points={totalEarnedPoints}
+          nextTierPoints={getNextTierPoints(totalEarnedPoints)}
+          onClose={() => setShowTierPopup(false)}
+          setActiveSection={setActiveSection}
+        />
+      )}
     </div>
   );
 }
